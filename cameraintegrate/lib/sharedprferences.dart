@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class sharedpreferences extends StatefulWidget {
   @override
   _sharedpreferencesState createState() => _sharedpreferencesState();
 }
-
 class _sharedpreferencesState extends State<sharedpreferences> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _fnController,

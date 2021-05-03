@@ -3,6 +3,7 @@ import 'package:cameraintegrate/main.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cameraintegrate/home.dart';
 import 'package:cameraintegrate/forms.dart';
 class otpscreen extends StatefulWidget {
   @override
@@ -12,6 +13,8 @@ class otpscreen extends StatefulWidget {
 class _otpscreenState extends State<otpscreen> {
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _otpController = TextEditingController();
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
   String verifID;
   bool buttonPushed = false;
   @override
@@ -32,6 +35,7 @@ class _otpscreenState extends State<otpscreen> {
         print(val);
       },
       codeAutoRetrievalTimeout: (String verifId) {
+        print(FirebaseAuth.instance.currentUser.phoneNumber);
         print('In Auto Retrieval Timeout');
         print(verifId);
       },
@@ -51,22 +55,32 @@ class _otpscreenState extends State<otpscreen> {
   }
 
   Widget build(BuildContext context) {
-    print(FirebaseAuth.instance.currentUser.phoneNumber);
     return Scaffold(
       appBar: AppBar(
         title: Text("OTP"),
       ),
       body: Column(
         children: [
-          TextField(
-            controller: _mobileController,
-            keyboardType: TextInputType.text,
+          buildTextField(_firstNameController),
+          buildTextField(_lastNameController),
+          buildTextField(_mobileController),
+          buildTextField(_otpController),
+          ElevatedButton(
+              onPressed: _sendOTP,
+              child: Text("Get OTP")
           ),
-          ElevatedButton(onPressed: _sendOTP, child: Text("Get")),
-          TextField(
-            controller: _otpController,
+          ElevatedButton(
+              onPressed: (){
+                verifyOtp;
+              },
+              child: Text("Verify OTP")
           ),
-          ElevatedButton(onPressed: () => verifyOtp(verifID, _otpController.value.text),child: Text("Verify OTP"),),
+          ElevatedButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => home()));
+              },
+              child: Text("Next")
+          ),
           // InkWell(
           //       child: Container(
           //         color: Colors.yellow,
@@ -81,12 +95,19 @@ class _otpscreenState extends State<otpscreen> {
       ),
     );
   }
+
+  TextField buildTextField(mob) {
+    return TextField(
+          controller: mob,
+          keyboardType: TextInputType.text,
+        );
+  }
   verifyOtp(String verificationId, String otp) {
     if (otp.length != 6) return null;
     if (verificationId.isEmpty) return null;
     var cred = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: otp);
     verificationCompleted(cred);
-    return Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
+    // return Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
   }
 }

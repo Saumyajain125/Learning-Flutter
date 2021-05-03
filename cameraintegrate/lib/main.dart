@@ -1,7 +1,9 @@
 import 'package:cameraintegrate/firebasee.dart';
+import 'package:cameraintegrate/otpscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:cameraintegrate/forms.dart';
+import 'package:cameraintegrate/home.dart';
 void main() {
   runApp(MyApp());
 }
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: firebasee(),
+      home: home(),
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
